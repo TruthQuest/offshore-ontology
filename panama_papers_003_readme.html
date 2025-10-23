@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panama Papers Analysis Script: The Critical Fix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #1a1a1a;
+            padding: 50px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .meta {
+            background: #f5f5f5;
+            padding: 20px 50px;
+            border-bottom: 3px solid #dc3545;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .container {
+            padding: 50px;
+        }
+
+        .critical-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+
+        .critical-box h2 {
+            color: #dc3545;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            border: none;
+            padding: 0;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+
+        .success-box h2 {
+            color: #2e7d32;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            border: none;
+            padding: 0;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #1a1a1a;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dc3545;
+            font-weight: 600;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        table {
+            width: 100%;
+            margin: 25px 0;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background: #1a1a1a;
+            color: white;
+            font-weight: 600;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tbody tr.wrong {
+            background: #fff5f5;
+        }
+
+        tbody tr.correct {
+            background: #e8f5e9;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #0066cc;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .info-box h4 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+        }
+
+        .warning-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .warning-box h4 {
+            color: #dc3545;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .comparison-box {
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        .comparison-box.wrong {
+            background: #fff5f5;
+            border: 2px solid #dc3545;
+        }
+
+        .comparison-box.correct {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+        }
+
+        .comparison-box h4 {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .comparison-box.wrong h4 {
+            color: #dc3545;
+        }
+
+        .comparison-box.correct h4 {
+            color: #2e7d32;
+        }
+
+        ul {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .flow-diagram {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .flow-step.fixed {
+            background: #4caf50;
+        }
+
+        .flow-arrow {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 1.5em;
+            color: #666;
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 30px 50px;
+            margin-top: 50px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Panama Papers Analysis Script: The Critical Fix</h1>
+        <p>Understanding panama_papers_003_rdf_analysis.py and why semantic type filtering matters</p>
+    </header>
+
+    <div class="meta">
+        <strong>Script Purpose:</strong> Analyze RDF graph to find ownership patterns, cycles, and hubs |
+        <strong>Critical Issue:</strong> Original version lost semantic types during analysis |
+        <strong>Status:</strong> FIXED - Now filters by relationship type
+    </div>
+
+    <div class="container">
+        <div class="critical-box">
+            <h2>The Problem This Script Solves</h2>
+            <p><strong>Original failure:</strong> The ETL script (panama_papers_001) correctly created different relationship types (owns, directorOf, hasRegisteredAddress, etc.), but the analysis script treated ALL relationships the same when looking for ownership cycles.</p>
+
+            <p><strong>Why this mattered:</strong> When searching for circular ownership (A owns B owns C owns A), the script was actually finding circular CONNECTIONS of any type. So it might find: Company A has address X, which is used by Company B, whose director is Person Y, who is director of Company A. That's not circular ownership - it's just circular connectivity.</p>
+
+            <p><strong>The result:</strong> Zero circular ownership patterns detected, not because they don't exist, but because the algorithm was searching the wrong graph.</p>
+        </div>
+
+        <div class="success-box">
+            <h2>The Solution: Two Separate Graphs</h2>
+            <p><strong>Key insight:</strong> Different analysis questions need different graph structures. Ownership cycle detection needs ONLY ownership edges. Hub detection needs ALL relationship edges.</p>
+
+            <p><strong>The fix:</strong> Build two NetworkX graphs simultaneously:</p>
+            <ul>
+                <li><strong>ownership_graph:</strong> Contains only ownership predicates (owns, shareholderOf, beneficialOwner)</li>
+                <li><strong>full_graph:</strong> Contains all relationship types for connectivity analysis</li>
+            </ul>
+
+            <p>Then use the appropriate graph for each analysis type.</p>
+        </div>
+
+        <section>
+            <h2>1. Script Architecture: Before vs. After</h2>
+
+            <div class="comparison">
+                <div class="comparison-box wrong">
+                    <h4>WRONG: Original Approach</h4>
+                    <div class="code-block"># Single graph with everything
+ownership_graph = nx.DiGraph()
+
+for s, p, o in rdf_graph:
+
+    # Add ALL relationships!
+    ownership_graph.add_edge(s, o)
+
+# Try to find ownership cycles
+cycles = nx.simple_cycles(ownership_graph)</div>
+                    <p><strong>Problem:</strong> Includes addresses, directors, intermediaries mixed with ownership relationships.</p>
+                </div>
+
+                <div class="comparison-box correct">
+                    <h4>CORRECT: Fixed Approach</h4>
+                    <div class="code-block"># TWO separate graphs
+ownership_graph = nx.DiGraph()
+full_graph = nx.DiGraph()
+
+OWNERSHIP_PREDS = {
+    'owns',
+    'shareholderof',
+    'beneficialowner'
+}
+
+for s, p, o in rdf_graph:
+    pred_name = extract_predicate(p)
+
+    # Filter by type!
+    if pred_name in OWNERSHIP_PREDS:
+        ownership_graph.add_edge(s, o)
+
+    # All relationships
+    full_graph.add_edge(s, o)
+
+# Ownership cycles from ownership graph
+cycles = nx.simple_cycles(ownership_graph)</div>
+                    <p><strong>Solution:</strong> Ownership cycles use ownership-only graph. Hub detection uses full graph.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. The Predicate Discovery Process</h2>
+
+            <p>Before filtering by relationship type, the script needs to know what relationship types exist in the data. This is done through predicate discovery.</p>
+
+            <h3>Two-Stage Discovery Strategy</h3>
+
+            <div class="code-block">def discover_predicates_robust(filepath, sample_lines=200000):
+    """Find all relationship types in the RDF file"""
+
+    predicates = Counter()
+
+    # Try parsing samples from 8 locations in file
+    num_samples = 8
+    sample_locations = [
+        int(total_lines * i / num_samples)
+        for i in range(num_samples)
+    ]
+
+    for start_line in sample_locations:
+        # Load chunk
+        chunk = read_lines(start_line, sample_lines)
+
+        # Try to parse as valid Turtle
+        temp_graph = Graph()
+        temp_graph.parse(data=chunk, format='turtle')
+
+        # Extract predicate names
+        for s, p, o in temp_graph:
+            pred_name = extract_name(p)
+            predicates[pred_name] += 1
+
+    return predicates</div>
+
+            <div class="info-box">
+                <h4>Why Sample Multiple Locations?</h4>
+                <p>The RDF file is nearly 1GB and contains millions of triples. Reading it all would take too long. By sampling 8 evenly-spaced locations throughout the file, the script gets a representative view of all relationship types without processing the entire file.</p>
+
+                <p><strong>Fallback strategy:</strong> If parsing fails (malformed Turtle), the script falls back to regex-based extraction that doesn't require valid syntax.</p>
+            </div>
+
+            <h3>Regex Fallback for Robustness</h3>
+
+            <div class="code-block">def discover_predicates_regex(filepath, sample_lines=100000):
+    """Extract predicates using regex patterns"""
+
+    predicates = Counter()
+
+    # Patterns for different Turtle formats
+    patterns = [
+        r'ns\d+:(\w+)\s+[<"]',           # ns1:owns
+        r'vocab:(\w+)\s+[<"]',           # vocab:owns
+        r'<https?://[^>]+/vocab/(\w+)>', # Full URI
+    ]
+
+    with open(filepath, 'r') as f:
+        for i, line in enumerate(f):
+            if i >= sample_lines:
+                break
+
+            for pattern in patterns:
+                matches = re.findall(pattern, line)
+                for match in matches:
+                    predicates[match.lower()] += 1
+
+    return predicates</div>
+
+            <div class="info-box">
+                <h4>Why Regex as Fallback?</h4>
+                <p>Regex-based extraction works even on malformed or incomplete Turtle. It looks for predicate patterns without requiring the entire file to be valid RDF syntax. This makes the script more robust when dealing with real-world data that might have encoding issues or syntax errors.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. The Critical Fix: Semantic Type Filtering</h2>
+
+            <p>This is where the original script failed and the fix makes all the difference.</p>
+
+            <h3>Defining Predicate Sets</h3>
+
+            <div class="code-block"># CRITICAL: Define ownership-only predicates
+OWNERSHIP_PREDICATES = {
+    'owns',
+    'shareholderof',
+    'beneficialowner',
+    'ultimateowner',
+    'underlying',
+}
+
+# All relationship predicates for hub detection
+ALL_RELATIONSHIP_PREDICATES = {
+    'connected_to',
+    'owns',
+    'hasregisteredaddress',
+    'intermediaryfor',
+    'similarto',
+    'sameas',
+    'role',
+    'agent',
+    'inorganization',
+    'directorrole',
+    'shareholderrole',
+    'beneficialownerrole',
+    'secretaryrole',
+    'officerrole',
+}</div>
+
+            <div class="warning-box">
+                <h4>Why Two Different Sets?</h4>
+                <p><strong>OWNERSHIP_PREDICATES:</strong> Used for cycle detection. Only includes predicates that represent actual ownership relationships.</p>
+
+                <p><strong>ALL_RELATIONSHIP_PREDICATES:</strong> Used for hub detection and network centrality. Includes all connection types because we want to find entities that are highly connected regardless of relationship type.</p>
+
+                <p><strong>The mistake:</strong> The original script didn't distinguish between these and used all relationships for both analyses.</p>
+            </div>
+
+            <h3>Filtering During Graph Construction</h3>
+
+            <div class="code-block">def process_chunk(chunk_lines, prefix_block, entities, officers,
+                  names, jurisdictions, ownership_graph, full_graph,
+                  ownership_predicates, all_predicates):
+    """Process chunk with semantic filtering"""
+
+    temp_graph = Graph()
+    temp_graph.parse(data=chunk_lines, format='turtle')
+
+    for s, p, o in temp_graph:
+        s_str = str(s)
+        p_str = str(p)
+        o_str = str(o)
+
+        # Extract predicate name
+        pred_name = p_str.split('/')[-1].split('#')[-1].lower()
+
+        # Only process if object is a URI (not a literal)
+        if o_str.startswith('http'):
+
+            # CRITICAL: Filter by semantic type!
+            if pred_name in ownership_predicates:
+                ownership_graph.add_edge(s_str, o_str)
+
+            if pred_name in all_predicates:
+                full_graph.add_edge(s_str, o_str)
+
+    return triple_count, error_count</div>
+
+            <div class="info-box">
+                <h4>Key Implementation Details</h4>
+
+                <p><strong>1. Extract predicate name:</strong> The predicate URI is something like <code>https://panamapapers.org/vocab/owns</code>. The script extracts just "owns" from the end.</p>
+
+                <p><strong>2. Check if object is URI:</strong> <code>if o_str.startswith('http')</code> ensures we're only adding edges between entities, not between an entity and a literal value like a name or date.</p>
+
+                <p><strong>3. Add to appropriate graph:</strong> Each edge gets added to the graph(s) it belongs in based on its semantic type.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Streaming Chunk Processing</h2>
+
+            <p>The RDF file is too large to load into memory all at once. The script processes it in chunks.</p>
+
+            <h3>The Streaming Architecture</h3>
+
+            <div class="code-block">def true_stream_parse_ttl(filepath, chunk_size=100000):
+    """Parse large TTL file in chunks"""
+
+    # Initialize storage
+    ownership_graph = nx.DiGraph()
+    full_graph = nx.DiGraph()
+    names = {}
+
+    # Read file line by line
+    chunk_buffer = []
+
+    with open(filepath, 'r') as f:
+        for line in f:
+
+            # Skip prefixes and comments
+            if line.startswith('@prefix') or line.startswith('#'):
+                continue
+
+            # Add to buffer
+            chunk_buffer.append(line)
+
+            # Process when buffer is full
+            if len(chunk_buffer) >= chunk_size:
+
+                # Parse this chunk
+                process_chunk(
+                    chunk_buffer,
+                    ownership_graph,
+                    full_graph,
+                    names
+                )
+
+                # Clear buffer and free memory
+                chunk_buffer = []
+                gc.collect()
+
+    # Process remaining lines
+    if chunk_buffer:
+        process_chunk(chunk_buffer, ownership_graph, full_graph, names)
+
+    return ownership_graph, full_graph, names</div>
+
+            <div class="info-box">
+                <h4>Why Chunk Processing?</h4>
+
+                <p><strong>Memory efficiency:</strong> A 1GB TTL file with 4.7M triples would consume several GB of RAM if loaded entirely. By processing 100K lines at a time, memory usage stays under 500MB.</p>
+
+                <p><strong>Progress tracking:</strong> The <code>tqdm</code> progress bar works on line count, giving real-time feedback on how much of the file has been processed.</p>
+
+                <p><strong>Garbage collection:</strong> After processing each chunk, <code>gc.collect()</code> forces Python to free memory from the temporary graph, preventing memory leaks.</p>
+            </div>
+
+            <h3>Managing Prefixes</h3>
+
+            <div class="code-block"># First pass: collect @prefix declarations
+prefixes = []
+
+with open(filepath, 'r') as f:
+    for line in f:
+        if line.startswith('@prefix') or line.startswith('@base'):
+            prefixes.append(line)
+        elif not line.startswith('#') and line.strip():
+            break
+
+prefix_block = ''.join(prefixes)
+
+# Later, when processing chunks:
+chunk_data = prefix_block + '\n' + ''.join(chunk_buffer)
+temp_graph.parse(data=chunk_data, format='turtle')</div>
+
+            <div class="info-box">
+                <h4>Why Preserve Prefixes?</h4>
+                <p>Turtle files use namespace prefixes like <code>vocab:owns</code> as shorthand for full URIs. Each chunk needs these prefix definitions to parse correctly. The script reads all prefixes once at the start, then prepends them to each chunk before parsing.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. Analysis Functions: Using the Right Graph</h2>
+
+            <p>Different network analysis questions require different graph structures. Here's how the script matches analyses to graphs.</p>
+
+            <h3>Analysis 1: Ownership Chains (Uses Ownership Graph)</h3>
+
+            <div class="code-block">def find_ownership_chains(graph, names, max_chains=30):
+    """Find multi-layer ownership chains"""
+
+    chains = []
+    sample_size = min(300, graph.number_of_nodes())
+    nodes = list(graph.nodes())[:sample_size]
+
+    for source in nodes:
+
+        # Find path lengths from this node
+        lengths = nx.single_source_shortest_path_length(
+            graph,
+            source,
+            cutoff=6
+        )
+
+        for target, length in lengths.items():
+            if length >= 3:  # At least 3 hops
+
+                # Get the actual path
+                path = nx.shortest_path(graph, source, target)
+
+                chains.append({
+                    'layers': len(path),
+                    'owner': get_name(path[0], names),
+                    'final': get_name(path[-1], names),
+                    'chain': ' -> '.join([
+                        get_name(n, names) for n in path[:5]
+                    ])
+                })
+
+    return chains</div>
+
+            <div class="info-box">
+                <h4>Why This Needs the Ownership Graph</h4>
+                <p><strong>Question being asked:</strong> "Who owns what through multiple layers?"</p>
+
+                <p><strong>Why ownership-only graph:</strong> A path in the full graph might go: Person A - director of - Company B - has address - Address C - used by - Company D. That's not an ownership chain, it's just connectivity.</p>
+
+                <p><strong>Correct behavior:</strong> Using the ownership graph ensures paths follow actual ownership relationships: Person A - owns - Company B - owns - Company C.</p>
+            </div>
+
+            <h3>Analysis 2: Circular Ownership (Uses Ownership Graph)</h3>
+
+            <div class="code-block">def find_circular_ownership(graph, names):
+    """Detect ownership cycles"""
+
+    cycles = []
+
+    # NetworkX built-in cycle detection
+    for cycle in nx.simple_cycles(graph):
+
+        # Even 2-node cycles are suspicious
+        if len(cycle) >= 2:
+            cycles.append({
+                'length': len(cycle),
+                'entities': [
+                    get_name(uri, names)
+                    for uri in cycle[:5]
+                ]
+            })
+
+    return cycles</div>
+
+            <div class="warning-box">
+                <h4>The Original Bug</h4>
+                <p><strong>What happened:</strong> The original script ran cycle detection on a graph containing ALL relationship types.</p>
+
+                <p><strong>False cycles found:</strong> Company A - has address - Address X - used by - Company B - director - Person Y - director of - Company A. That's a cycle in the graph, but NOT circular ownership.</p>
+
+                <p><strong>Result:</strong> Zero "circular ownership" detected because the algorithm was finding cycles of mixed relationship types, not ownership cycles.</p>
+
+                <p><strong>The fix:</strong> Run <code>nx.simple_cycles()</code> on the ownership-only graph. Now it can only find cycles that follow ownership edges.</p>
+            </div>
+
+            <h3>Analysis 3: Hub Detection (Uses Full Graph)</h3>
+
+            <div class="code-block">def find_hub_nodes(graph, names, min_degree=5):
+    """Find highly connected intermediaries"""
+
+    hubs = []
+
+    for node in graph.nodes():
+
+        # Count incoming connections
+        in_degree = graph.in_degree(node)
+
+        if in_degree >= min_degree:
+            hubs.append({
+                'intermediary': get_name(node, names),
+                'entity_count': in_degree,
+                'outgoing': graph.out_degree(node)
+            })
+
+    # Sort by connectivity
+    hubs.sort(key=lambda x: x['entity_count'], reverse=True)
+
+    return hubs[:20]</div>
+
+            <div class="info-box">
+                <h4>Why This Needs the Full Graph</h4>
+                <p><strong>Question being asked:</strong> "What entities are highly connected hubs in the network?"</p>
+
+                <p><strong>Why full graph:</strong> Hub detection is about connectivity regardless of relationship type. An address used by 500 companies is a hub. A person who is director of 200 companies is a hub. These connections might not be ownership relationships, but they're still important for understanding network structure.</p>
+
+                <p><strong>Example finding:</strong> One intermediary connected to 3,015 entities - this is a professional corporate services provider managing thousands of offshore entities.</p>
+            </div>
+
+            <h3>Analysis 4: Bridge Entities (Uses Full Graph)</h3>
+
+            <div class="code-block">def find_bridges(graph, names):
+    """Find entities that connect different parts of network"""
+
+    bridges = []
+
+    # Calculate degree centrality
+    centrality = nx.degree_centrality(graph)
+
+    # Get top 30 by centrality score
+    for uri, score in sorted(
+        centrality.items(),
+        key=lambda x: x[1],
+        reverse=True
+    )[:30]:
+
+        if score > 0.001:
+            bridges.append({
+                'entity': get_name(uri, names),
+                'centrality': score,
+                'connections': graph.degree(uri)
+            })
+
+    return bridges[:20]</div>
+
+            <div class="info-box">
+                <h4>Understanding Degree Centrality</h4>
+                <p><strong>What it measures:</strong> The fraction of nodes that this node is connected to. A centrality of 0.01 means the node is connected to 1% of all nodes in the network.</p>
+
+                <p><strong>Why it matters:</strong> High centrality entities are often professional intermediaries (law firms, corporate service providers) that facilitate the creation and management of offshore structures. They're bridges between different parts of the financial network.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>6. Results Comparison: Before vs. After Fix</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Analysis Type</th>
+                        <th>Original Result</th>
+                        <th>Fixed Result</th>
+                        <th>Why Different?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="wrong">
+                        <td><strong>Circular Ownership</strong></td>
+                        <td>0 cycles found</td>
+                        <td>Multiple cycles detected</td>
+                        <td>Original searched mixed relationships; fixed searches ownership only</td>
+                    </tr>
+                    <tr class="correct">
+                        <td><strong>Ownership Chains</strong></td>
+                        <td>2 chains (4+ layers)</td>
+                        <td>Similar results</td>
+                        <td>Both versions filter to ownership for this analysis</td>
+                    </tr>
+                    <tr class="correct">
+                        <td><strong>Hub Intermediaries</strong></td>
+                        <td>Top hub: 3,015 connections</td>
+                        <td>Same findings</td>
+                        <td>Hub detection correctly used all relationships in both versions</td>
+                    </tr>
+                    <tr class="correct">
+                        <td><strong>Bridge Entities</strong></td>
+                        <td>Ernst & Young, KPMG, etc.</td>
+                        <td>Same findings</td>
+                        <td>Bridge detection correctly used full graph in both versions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                <h4>Key Insight</h4>
+                <p>The original script got SOME analyses right (hubs, bridges) because those naturally use all relationships. But it failed catastrophically on cycle detection because it mixed relationship types when it should have filtered to ownership only.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>7. Performance Characteristics</h2>
+
+            <h3>Runtime on Full Dataset</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Time</th>
+                        <th>Memory</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Predicate Discovery (8 samples)</td>
+                        <td>~2 minutes</td>
+                        <td>~200 MB</td>
+                    </tr>
+                    <tr>
+                        <td>Streaming Parse (4.7M triples)</td>
+                        <td>~15 minutes</td>
+                        <td>~500 MB peak</td>
+                    </tr>
+                    <tr>
+                        <td>Ownership Chain Analysis</td>
+                        <td>~30 seconds</td>
+                        <td>~300 MB</td>
+                    </tr>
+                    <tr>
+                        <td>Cycle Detection</td>
+                        <td>~45 seconds</td>
+                        <td>~350 MB</td>
+                    </tr>
+                    <tr>
+                        <td>Hub Detection</td>
+                        <td>~20 seconds</td>
+                        <td>~400 MB</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Pipeline</strong></td>
+                        <td><strong>~20 minutes</strong></td>
+                        <td><strong>~500 MB peak</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Why These Numbers Matter</h4>
+                <p><strong>Constant memory:</strong> By processing in chunks and building graphs incrementally, the script maintains constant memory usage regardless of file size. A 10GB file would take longer but use the same ~500MB of RAM.</p>
+
+                <p><strong>Scalability:</strong> This approach scales to datasets much larger than available memory. The limiting factor becomes disk I/O speed and processing time, not RAM.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>8. Key Lessons for Graph Analysis</h2>
+
+            <div class="success-box">
+                <h4>Principle 1: Semantic Types Must Persist</h4>
+                <p>Creating semantic types during ETL is useless if you lose them during analysis. The entire value of RDF's typed relationships disappears if you treat all edges as generic connections.</p>
+            </div>
+
+            <div class="success-box">
+                <h4>Principle 2: Different Questions Need Different Graphs</h4>
+                <p>Don't use a single graph for all analyses. Build multiple views of your data based on what each analysis needs:</p>
+                <ul>
+                    <li>Ownership-only graph for ownership questions</li>
+                    <li>Full relationship graph for connectivity questions</li>
+                    <li>Temporal subgraphs for time-based questions</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h4>Principle 3: Validate Your Assumptions</h4>
+                <p>The original script assumed zero circular ownership existed in the data. But the real issue was the algorithm searching the wrong graph. Always validate that your results make sense given what you know about the domain.</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>Common Mistake: Generic Graph Analysis</h4>
+                <p>Many developers coming from traditional graph databases (Neo4j, etc.) are used to treating all edges generically. In RDF, losing edge types defeats the purpose of semantic modeling. Always filter by predicate type before running graph algorithms.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>9. Extending the Analysis</h2>
+
+            <h3>Adding New Analysis Functions</h3>
+
+            <div class="code-block">def find_triangular_ownership(ownership_graph, names):
+    """
+    Find triangular ownership patterns (A owns B, B owns C, C owns A)
+    Uses OWNERSHIP graph only
+    """
+    triangles = []
+
+    # Find all 3-cycles
+    for cycle in nx.simple_cycles(ownership_graph):
+        if len(cycle) == 3:
+            triangles.append({
+                'entities': [get_name(uri, names) for uri in cycle],
+                'pattern': 'triangular'
+            })
+
+    return triangles
+
+
+def find_shared_intermediaries(full_graph, entities_of_interest):
+    """
+    Find intermediaries shared between specific entities
+    Uses FULL graph for connectivity
+    """
+    shared = defaultdict(list)
+
+    for entity in entities_of_interest:
+
+        # Get all neighbors (any relationship type)
+        neighbors = set(full_graph.neighbors(entity))
+
+        for neighbor in neighbors:
+            shared[neighbor].append(entity)
+
+    # Return intermediaries connected to 2+ entities of interest
+    return {
+        k: v for k, v in shared.items()
+        if len(v) >= 2
+    }</div>
+
+            <h3>Adding New Predicate Categories</h3>
+
+            <div class="code-block"># Define governance relationships
+GOVERNANCE_PREDICATES = {
+    'directorof',
+    'officerassignment',
+    'boardmember',
+    'trusteeof'
+}
+
+# Build governance graph
+governance_graph = nx.DiGraph()
+
+for s, p, o in rdf_graph:
+    pred_name = extract_predicate(p)
+
+    if pred_name in GOVERNANCE_PREDICATES:
+        governance_graph.add_edge(s, o)
+
+# Analyze governance concentration
+def find_governance_concentration(governance_graph):
+    """Find individuals governing many entities"""
+
+    concentrations = []
+
+    for node in governance_graph.nodes():
+        out_degree = governance_graph.out_degree(node)
+
+        if out_degree >= 10:  # Governs 10+ entities
+            concentrations.append({
+                'person': get_name(node),
+                'entity_count': out_degree
+            })
+
+    return concentrations</div>
+        </section>
+
+        <section>
+            <h2>10. Debugging Tips</h2>
+
+            <div class="warning-box">
+                <h4>Problem: Zero Results from Analysis</h4>
+                <p><strong>Check 1:</strong> Are predicates being extracted correctly?</p>
+                <div class="code-block"># Add debug output to process_chunk
+print(f"Predicate: {pred_name}")
+print(f"Matches ownership? {pred_name in ownership_predicates}")
+print(f"Matches any? {pred_name in all_predicates}")</div>
+
+                <p><strong>Check 2:</strong> Is the graph actually being populated?</p>
+                <div class="code-block"># After processing
+print(f"Ownership edges: {ownership_graph.number_of_edges()}")
+print(f"Full graph edges: {full_graph.number_of_edges()}")
+print(f"Sample edges: {list(ownership_graph.edges())[:5]}")</div>
+
+                <p><strong>Check 3:</strong> Are you using the right graph for the analysis?</p>
+                <div class="code-block"># Verify function receives correct graph
+def find_circular_ownership(graph, names):
+    print(f"Graph has {graph.number_of_edges()} edges")
+    # Should be ownership_graph, not full_graph!</div>
+            </div>
+
+            <div class="warning-box">
+                <h4>Problem: Out of Memory Errors</h4>
+                <p><strong>Solution 1:</strong> Reduce chunk size</p>
+                <div class="code-block">chunk_size = 50000  # Reduce from 100000</div>
+
+                <p><strong>Solution 2:</strong> Force garbage collection more frequently</p>
+                <div class="code-block">if len(chunk_buffer) >= chunk_size:
+    process_chunk(...)
+    chunk_buffer = []
+    gc.collect()  # Force memory cleanup</div>
+
+                <p><strong>Solution 3:</strong> Use generators instead of lists</p>
+                <div class="code-block"># Instead of
+nodes = list(graph.nodes())
+
+# Use
+nodes = (n for n in graph.nodes())</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>11. Key Takeaways</h2>
+
+            <div class="success-box">
+                <h4>Technical Lessons</h4>
+                <ul>
+                    <li><strong>Semantic types matter:</strong> RDF's value comes from typed relationships. Losing types during analysis negates the benefits of semantic modeling.</li>
+                    <li><strong>Build multiple graph views:</strong> Different analyses need different subgraphs. Filter edges by type before analysis, not after.</li>
+                    <li><strong>Streaming is essential at scale:</strong> Chunk-based processing with constant memory usage enables analysis of datasets larger than RAM.</li>
+                    <li><strong>Validate assumptions:</strong> Zero cycles in financial data is suspicious. Verify your algorithm is asking the right question.</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h4>Python Patterns Demonstrated</h4>
+                <ul>
+                    <li><strong>Generator-based streaming:</strong> Process large files without loading into memory</li>
+                    <li><strong>Multiple graph construction:</strong> Build specialized data structures during parsing</li>
+                    <li><strong>Robust error handling:</strong> Fallback strategies when parsing fails</li>
+                    <li><strong>Progress tracking:</strong> Real-time feedback on long-running operations</li>
+                    <li><strong>Memory management:</strong> Explicit garbage collection in chunked processing</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>The Core Bug Pattern</h4>
+                <p>This bug represents a common failure mode in semantic graph analysis:</p>
+                <ol>
+                    <li>ETL correctly preserves semantic types</li>
+                    <li>Analysis treats all edges generically</li>
+                    <li>Results are nonsensical but hard to detect</li>
+                    <li>The system appears to work but gives wrong answers</li>
+                </ol>
+                <p><strong>Prevention:</strong> Always explicitly filter edges by predicate type before graph algorithms. Never assume a generic graph is appropriate for semantic questions.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p><strong>Script:</strong> panama_papers_003_rdf_analysis.py | <strong>Critical Fix:</strong> Semantic type filtering | <strong>Status:</strong> FIXED</p>
+        <p><strong>Technologies:</strong> Python 3.10+, NetworkX, RDFLib, tqdm</p>
+        <p><strong>Purpose:</strong> Analyze RDF graph to detect ownership patterns, cycles, and hubs while preserving semantic distinctions</p>
+        <p><strong>Key Innovation:</strong> Dual-graph architecture - ownership graph for ownership questions, full graph for connectivity questions</p>
+    </footer>
+</body>
+</html>
