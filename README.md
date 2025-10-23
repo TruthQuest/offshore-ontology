@@ -1,6 +1,8 @@
 # Learning RDF with the Panama Papers  
 ### Semantic Modeling, Validation, and Graph-Based Analysis
 
+![Money Laundering Network Visualization](https://github.com/TruthQuest/offshore-ontology/blob/main/graphics/money_launder.png)
+
 ---
 
 ## Overview
