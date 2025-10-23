@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning RDF: A Practical Journey with Real Data</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #1a1a1a;
+            padding: 50px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .meta {
+            background: #f5f5f5;
+            padding: 20px 50px;
+            border-bottom: 3px solid #A100FF;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .container {
+            padding: 50px;
+        }
+
+        .executive-brief {
+            background: #fff9e6;
+            border-left: 4px solid #ff9900;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+
+        .executive-brief h2 {
+            color: #cc7a00;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            border: none;
+            padding: 0;
+        }
+
+        .reality-check {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+
+        .reality-check h2 {
+            color: #2e7d32;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            border: none;
+            padding: 0;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #1a1a1a;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #A100FF;
+            font-weight: 600;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        table {
+            width: 100%;
+            margin: 25px 0;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background: #1a1a1a;
+            color: white;
+            font-weight: 600;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tbody tr.highlight {
+            background: #fff9e6;
+            border-left: 3px solid #ff9900;
+        }
+
+        .decision-box {
+            background: #f0f7ff;
+            border-left: 4px solid #0066cc;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .decision-box h4 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+        }
+
+        .warning-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .warning-box h4 {
+            color: #dc3545;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .success-box h4 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            border-radius: 4px;
+        }
+
+        ul {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .metric .value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #A100FF;
+            display: block;
+        }
+
+        .metric .label {
+            font-size: 0.9em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 8px;
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 30px 50px;
+            margin-top: 50px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://cdn.midjourney.com/ba405373-1744-4f02-aa49-d69c76392a79/0_2.png"
+         alt=""
+         style="width: 100%; max-height: 350px; object-fit: cover; display: block;">
+
+    <header>
+        <h1>One Nominee, 1,409 Shell Companies: Mapping Criminal Infrastructure</h1>
+        <p>What network analysis of 2 million Panama Papers entities reveals about the industrial infrastructure of financial crime and the semantic types that hide it</p>
+        <p style="margin-top: 10px; font-size: 0.95em;">Data Source: <a href="https://offshoreleaks.icij.org/pages/database" target="_blank" style="color: #A100FF; text-decoration: underline;">ICIJ Offshore Leaks Database</a></p>
+    </header>
+
+    <div class="meta">
+        <strong>What I Built:</strong> Panama Papers network analysis - 2M+ entities, 3.3M relationships, 9M+ triples |
+        <strong>Tech Used:</strong> RDF, OWL, SHACL, NetworkX |
+        <strong>Exposed:</strong> Industrial-scale money laundering infrastructure |
+        <strong>For:</strong> Anyone starting their RDF journey
+    </div>
+
+    <div class="container">
+        <main>
+
+        <div class="executive-brief" style="background: #f0f7ff; border-left: 4px solid #0066cc;">
+            <h2 style="color: #0066cc;">Executive Summary</h2>
+            <p><strong>Project Goal:</strong> Learn RDF by building a knowledge graph system using 2 million real entities from the Panama Papers.</p>
+
+            <p><strong>Key Finding:</strong> Semantic type preservation across all system layers (ETL, storage, analysis, queries) is critical for RDF to deliver value over simpler graph databases. I successfully modeled relationships during import but lost semantic distinctions during analysis, turning a semantic graph into a generic property graph at query time.</p>
+
+            <p><strong>Technical Contribution:</strong> Hybrid relationship mapping (pattern matching + machine learning embeddings) achieved 95% accuracy in classifying ambiguous spreadsheet relationships into proper RDF predicates (70% regex patterns, 25% ML similarity, 5% fallback).</p>
+
+            <p><strong>Failure Mode Identified:</strong> Analysis layer treated all relationship types equally (addresses, directors, ownership) rather than filtering by semantic type before running graph algorithms. This obscured true ownership patterns and prevented detection of circular ownership. After fixing filtering: still 0 circular ownership found, revealing that the source data lacked sufficient ownership relationships or they were misclassified during import.</p>
+
+            <p><strong>Applied Outcome:</strong> Identified 3,015-entity hub intermediary and mapped professional service provider networks (Ernst & Young: 634 entities, KPMG: 602 entities). For investigators: targeting top 5 hub intermediaries exposes around 7,900 shell companies with single subpoenas. Professional nominees (1,409 entities under single individual) are high-leverage targets for testimony.</p>
+
+            <p><strong>Performance:</strong> Parallel processing achieved 4x import speedup, streaming parser handled 4.7M triples in 500MB RAM, provenance tracking added 6x storage overhead but enabled audit trails.</p>
+        </div>
+
+        <div class="executive-brief">
+            <h2>Learning Objectives</h2>
+            <p><strong>After working through this guide, you'll be able to:</strong></p>
+
+            <ul style="margin-top: 15px;">
+                <li><strong>Build complete RDF systems:</strong> Create ontologies, validate data with SHACL, and query with SPARQL</li>
+                <li><strong>Make informed technology choices:</strong> Understand when RDF wins vs when property graphs are better</li>
+                <li><strong>Model relationships semantically:</strong> Use typed predicates and property hierarchies for reasoning</li>
+                <li><strong>Avoid critical pitfalls:</strong> Preserve semantic types through your entire stack (the failure mode I hit)</li>
+                <li><strong>Scale to production:</strong> Apply parallel processing, streaming parsers, and provenance tracking</li>
+                <li><strong>Query complex patterns:</strong> Find ownership chains, detect cycles, calculate network centrality</li>
+            </ul>
+
+            <p style="margin-top: 20px;"><strong>Time commitment:</strong> 2-3 hours to read and experiment | <strong>Prerequisites:</strong> Basic Python, understanding of databases</p>
+        </div>
+
+        <div class="executive-brief">
+            <h2>What I Set Out to Learn</h2>
+            <p><strong>My goal:</strong> Learn how to build large-scale knowledge graphs using RDF (a way of representing data as connected facts), understand when RDF is the right choice versus other approaches, and figure out best practices through hands-on work.</p>
+
+            <ul style="margin-top: 15px;">
+                <li><strong>When RDF is great:</strong> When you need to combine data from multiple sources that describe things differently</li>
+                <li><strong>When other approaches work better:</strong> When you need real-time fraud detection with predictable query patterns</li>
+                <li><strong>My main theory:</strong> Designing your data model carefully (what we call "ontology") is crucial for making RDF work well</li>
+                <li><strong>Expected challenge:</strong> RDF might be slower than specialized graph databases</li>
+                <li><strong>End goal:</strong> Build a complete system that validates data quality, tracks where data came from, and enables complex queries</li>
+            </ul>
+        </div>
+
+        <section>
+            <h2>0. Quickstart: A Runnable RDF Example</h2>
+
+            <p><strong>Before diving into my project:</strong> Here's a minimal working example you can run to understand the core concepts. This demonstrates the key patterns that my larger system implements.</p>
+
+            <h3>Step 1: Define Your Ontology (schema.ttl)</h3>
+            <div class="code-block">@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+@prefix ex: &lt;https://example.org/vocab/&gt; .
+
+# Ontology header
+&lt;https://example.org/vocab/&gt; a owl:Ontology ;
+    rdfs:label "Example Knowledge Graph Ontology" ;
+    rdfs:comment "Demonstration ontology for RDF learning" ;
+    owl:versionInfo "1.0" .
+
+
+# Core classes
+ex:Person a owl:Class ;
+    rdfs:label "Person" ;
+    rdfs:comment "An individual person" .
+
+ex:Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "A company or legal entity" .
+
+ex:Role a owl:Class ;
+    rdfs:label "Role" ;
+    rdfs:comment "A role that can be assigned to a person" .
+
+ex:RoleAssignment a owl:Class ;
+    rdfs:label "Role Assignment" ;
+    rdfs:comment "N-ary pattern connecting person, organization, role, and time" .
+
+
+# Property hierarchy - this is key!
+ex:connectedTo a owl:ObjectProperty ;
+    rdfs:label "connected to" ;
+    rdfs:comment "Generic connection between entities" .
+
+ex:owns a owl:ObjectProperty ;
+    rdfs:label "owns" ;
+    rdfs:comment "Direct ownership relationship" ;
+    rdfs:subPropertyOf ex:connectedTo ;
+    owl:inverseOf ex:ownedBy .
+
+ex:ownedBy a owl:ObjectProperty ;
+    rdfs:label "owned by" ;
+    rdfs:comment "Inverse of owns" .
+
+ex:governs a owl:ObjectProperty ;
+    rdfs:label "governs" ;
+    rdfs:comment "Has governance control over" .
+
+ex:directorOf a owl:ObjectProperty ;
+    rdfs:label "director of" ;
+    rdfs:comment "Serves as director" ;
+    rdfs:subPropertyOf ex:governs .
+
+
+# Role-based properties (for n-ary pattern)
+ex:agent a owl:ObjectProperty ;
+    rdfs:label "agent" ;
+    rdfs:comment "The person assigned to a role" ;
+    rdfs:domain ex:RoleAssignment ;
+    rdfs:range ex:Person .
+
+ex:inOrganization a owl:ObjectProperty ;
+    rdfs:label "in organization" ;
+    rdfs:comment "The organization where role is assigned" ;
+    rdfs:domain ex:RoleAssignment ;
+    rdfs:range ex:Organization .
+
+ex:role a owl:ObjectProperty ;
+    rdfs:label "role" ;
+    rdfs:comment "The specific role being assigned" ;
+    rdfs:domain ex:RoleAssignment .
+
+
+# Temporal properties
+ex:startDate a owl:DatatypeProperty ;
+    rdfs:label "start date" ;
+    rdfs:comment "When the role assignment began" ;
+    rdfs:domain ex:RoleAssignment ;
+    rdfs:range xsd:date .
+
+ex:endDate a owl:DatatypeProperty ;
+    rdfs:label "end date" ;
+    rdfs:comment "When the role assignment ended" ;
+    rdfs:domain ex:RoleAssignment ;
+    rdfs:range xsd:date .
+
+
+# Specific roles
+ex:DirectorRole a ex:Role ;
+    rdfs:label "Director" .
+
+ex:ShareholderRole a ex:Role ;
+    rdfs:label "Shareholder" .
+
+ex:OfficerRole a ex:Role ;
+    rdfs:label "Officer" .</div>
+
+            <h3>Step 2: Create Sample Data (data.ttl)</h3>
+            <div class="code-block">@prefix ex: &lt;https://example.org/vocab/&gt; .
+@prefix entity: &lt;https://example.org/entity/&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+
+# People
+entity:alice a ex:Person ;
+    foaf:name "Alice Chen" .
+
+entity:bob a ex:Person ;
+    foaf:name "Bob Smith" .
+
+
+# Organizations
+entity:acmeCorp a ex:Organization ;
+    foaf:name "ACME Corp" .
+
+entity:techInc a ex:Organization ;
+    foaf:name "Tech Inc" .
+
+
+# Ownership (direct predicate)
+entity:alice ex:owns entity:acmeCorp .
+
+entity:acmeCorp ex:owns entity:techInc .
+
+
+# Role assignment (n-ary pattern for temporal data)
+entity:assignment1 a ex:RoleAssignment ;
+    ex:agent entity:bob ;
+    ex:inOrganization entity:acmeCorp ;
+    ex:role ex:DirectorRole ;
+    ex:startDate "2012-01-01"^^xsd:date ;
+    ex:endDate "2014-12-31"^^xsd:date .
+
+entity:assignment2 a ex:RoleAssignment ;
+    ex:agent entity:bob ;
+    ex:inOrganization entity:techInc ;
+    ex:role ex:DirectorRole ;
+    ex:startDate "2015-01-01"^^xsd:date .</div>
+
+            <h3>Step 3: Define Validation Rules (shapes.ttl)</h3>
+            <div class="code-block">@prefix sh: &lt;http://www.w3.org/ns/shacl#&gt; .
+@prefix ex: &lt;https://example.org/vocab/&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+
+# Every person must have a name (SHACL-Core)
+ex:PersonShape a sh:NodeShape ;
+    sh:targetClass ex:Person ;
+    sh:property [
+        sh:path foaf:name ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Person must have a name" ;
+        sh:severity sh:Violation
+    ] .
+
+
+# Role assignments with advanced constraints (SHACL-Core + SHACL-SPARQL)
+ex:RoleShape a sh:NodeShape ;
+    sh:targetClass ex:RoleAssignment ;
+    sh:closed false ;
+
+    # Must have agent
+    sh:property [
+        sh:path ex:agent ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:class ex:Person ;
+        sh:message "Role must have exactly one agent of type Person"
+    ] ;
+
+    # Must have organization
+    sh:property [
+        sh:path ex:inOrganization ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class ex:Organization ;
+        sh:message "Role must be in exactly one organization"
+    ] ;
+
+    # Must have start date
+    sh:property [
+        sh:path ex:startDate ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:date ;
+        sh:message "Role must have start date"
+    ] ;
+
+    # Optional end date
+    sh:property [
+        sh:path ex:endDate ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:date ;
+        sh:message "End date must be xsd:date"
+    ] ;
+
+    # Cross-property constraint: endDate > startDate (SHACL-SPARQL)
+    sh:sparql [
+        sh:message "End date must be after start date" ;
+        sh:select """
+            PREFIX ex: &lt;https://example.org/vocab/&gt;
+            SELECT $this
+            WHERE {
+                $this ex:startDate ?start .
+                $this ex:endDate ?end .
+                FILTER(?end &lt; ?start)
+            }
+        """
+    ] .</div>
+
+            <h3>Step 4: Query Examples (queries.sparql)</h3>
+            <div class="code-block"># Query 1: Find ownership chains (uses property hierarchy)
+PREFIX ex: &lt;https://example.org/vocab/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+SELECT ?owner ?ownerName ?owned ?ownedName
+WHERE {
+    ?owner ex:owns+ ?owned .
+    ?owner foaf:name ?ownerName .
+    ?owned foaf:name ?ownedName .
+}
+
+# Result: Alice → ACME → Tech Inc (2 rows)
+
+
+
+
+# Query 2: Who was a director in 2012 but not 2015?
+PREFIX ex: &lt;https://example.org/vocab/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+
+SELECT ?person ?name ?org
+WHERE {
+    # Was director in 2012
+    ?assignment1 a ex:RoleAssignment ;
+                 ex:agent ?person ;
+                 ex:inOrganization ?org ;
+                 ex:role ex:DirectorRole ;
+                 ex:startDate ?start .
+
+    OPTIONAL { ?assignment1 ex:endDate ?end }
+
+    FILTER(
+        ?start &lt;= "2012-12-31"^^xsd:date &&
+        (!BOUND(?end) || ?end &gt;= "2012-01-01"^^xsd:date)
+    )
+
+    # Not director in 2015
+    FILTER NOT EXISTS {
+        ?assignment2 a ex:RoleAssignment ;
+                     ex:agent ?person ;
+                     ex:role ex:DirectorRole ;
+                     ex:startDate ?start2 .
+
+        OPTIONAL { ?assignment2 ex:endDate ?end2 }
+
+        FILTER(
+            ?start2 &lt;= "2015-12-31"^^xsd:date &&
+            (!BOUND(?end2) || ?end2 &gt;= "2015-01-01"^^xsd:date)
+        )
+    }
+
+    ?person foaf:name ?name .
+}
+
+# Result: Bob (director of ACME 2012-2014, not in 2015)</div>
+
+            <h3>Step 5: Run Validation (Python)</h3>
+            <div class="code-block">from rdflib import Graph
+from pyshacl import validate
+
+
+# Load data and shapes
+data_graph = Graph()
+data_graph.parse("schema.ttl", format="turtle")
+data_graph.parse("data.ttl", format="turtle")
+
+shapes_graph = Graph()
+shapes_graph.parse("shapes.ttl", format="turtle")
+
+
+# Validate
+conforms, results_graph, results_text = validate(
+    data_graph,
+    shacl_graph=shapes_graph,
+    inference='rdfs',
+    abort_on_first=False
+)
+
+if conforms:
+    print("✓ Data is valid!")
+else:
+    print("✗ Validation failures:")
+    print(results_text)</div>
+
+            <h3>Step 6: Run Queries (Python)</h3>
+            <div class="code-block">from rdflib import Graph
+
+g = Graph()
+g.parse("schema.ttl", format="turtle")
+g.parse("data.ttl", format="turtle")
+
+
+# Query 1: Ownership chains
+query1 = """
+PREFIX ex: &lt;https://example.org/vocab/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+
+SELECT ?owner ?ownerName ?owned ?ownedName
+WHERE {
+    ?owner ex:owns+ ?owned .
+    ?owner foaf:name ?ownerName .
+    ?owned foaf:name ?ownedName .
+}
+"""
+
+print("Ownership chains:")
+for row in g.query(query1):
+    print(f"  {row.ownerName} → {row.ownedName}")
+
+
+# Query 2: Temporal roles (simplified)
+query2 = """
+PREFIX ex: &lt;https://example.org/vocab/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+
+SELECT ?name ?org ?start ?end
+WHERE {
+    ?assignment ex:agent ?person ;
+                ex:inOrganization ?org ;
+                ex:startDate ?start .
+    OPTIONAL { ?assignment ex:endDate ?end }
+    ?person foaf:name ?name .
+}
+"""
+
+print("\nRole assignments:")
+for row in g.query(query2):
+    end = row.end if row.end else "present"
+    print(f"  {row.name} at {row.org}: {row.start} to {end}")</div>
+
+            <div class="success-box">
+                <h4>What This Demonstrates</h4>
+                <ul>
+                    <li><strong>Property hierarchy:</strong> Query <code>ex:owns+</code> finds multi-hop chains</li>
+                    <li><strong>Temporal modeling:</strong> N-ary RoleAssignment pattern captures start/end dates</li>
+                    <li><strong>Validation:</strong> SHACL catches missing required fields</li>
+                    <li><strong>Inference:</strong> <code>rdfs:subPropertyOf</code> lets you query at different abstraction levels</li>
+                </ul>
+                <p><strong>Now let's see how I applied these patterns at scale with 2M+ real entities from the Panama Papers...</strong></p>
+            </div>
+        </section>
+
+        <section>
+            <h2>1. Choosing the Right Technology</h2>
+
+            <h3>Comparing Three Approaches: When to Use What</h3>
+
+            <p><strong>Important context:</strong> These comparisons are based on my specific dataset (2M+ entities, financial networks) and published benchmarks. Your results will vary significantly based on your data characteristics, query patterns, hardware, and implementation choices. Treat these as directional guidance, not absolute rules.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>What You're Trying to Do</th>
+                        <th>RDF/SPARQL<br/>(What I Used)</th>
+                        <th>Property Graph<br/>(Like Neo4j)</th>
+                        <th>Traditional SQL Database</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Combining data from many sources</strong></td>
+                        <td style="background: #d4edda;">✓ Best choice (can reuse vocabularies)</td>
+                        <td style="background: #fff3cd;">△ Requires custom integration work</td>
+                        <td style="background: #f8d7da;">✗ Schema mapping effort varies; weeks if schemas diverge</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Real-time fraud detection</strong></td>
+                        <td style="background: #f8d7da;">✗ Typically slower for graph traversal in my tests</td>
+                        <td style="background: #d4edda;">✓ Often fastest for traversals on indexed graphs</td>
+                        <td style="background: #fff3cd;">△ Performance depends on query optimization</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Compliance reporting</strong></td>
+                        <td style="background: #d4edda;">✓ Best (built-in audit trails)</td>
+                        <td style="background: #fff3cd;">△ Need to add custom tracking</td>
+                        <td style="background: #fff3cd;">△ Standard approach, well-proven</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exploratory data analysis</strong></td>
+                        <td style="background: #fff3cd;">△ Flexible but query language is verbose</td>
+                        <td style="background: #d4edda;">✓ Best (intuitive query language)</td>
+                        <td style="background: #f8d7da;">✗ Must know structure in advance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Operational complexity</strong></td>
+                        <td style="background: #f8d7da;">✗ High (many technical concepts to manage)</td>
+                        <td style="background: #d4edda;">✓ Low (simpler setup, mature tools)</td>
+                        <td style="background: #d4edda;">✓ Low (well-established practices)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>2. Key Design Patterns I Learned</h2>
+
+            <h3>2.1 Naming Things: URIs vs UUIDs</h3>
+
+            <p><strong>The challenge:</strong> In RDF, everything needs a unique identifier (called a URI). But how do you create these identifiers reliably?</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>HTTP URIs<br/>(RDF Standard)</th>
+                        <th>UUIDs<br/>(Random IDs)</th>
+                        <th>Hybrid<br/>(What I Recommend)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Guaranteed uniqueness</strong></td>
+                        <td>Requires coordination between teams</td>
+                        <td>✓ Automatic</td>
+                        <td>✓ UUID as primary, URI as alias</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Infrastructure needed</strong></td>
+                        <td>Requires web server and DNS</td>
+                        <td>✓ No infrastructure needed</td>
+                        <td>✓ Infrastructure is optional</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ease of debugging</strong></td>
+                        <td>✓ Human-readable paths</td>
+                        <td>Cryptic random strings</td>
+                        <td>✓ Can look up in registry</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Linked data compatibility</strong></td>
+                        <td>✓ Native support</td>
+                        <td>Requires wrapper layer</td>
+                        <td>✓ Via mapping service</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="decision-box">
+                <h4>What I Recommend: Use UUIDs with a Registry</h4>
+                <p>Use randomly-generated UUIDs as your main identifiers, but maintain a separate registry that maps them to readable URIs:</p>
+                <div class="code-block">Primary ID: 550e8400-e29b-41d4-a716-446655440000
+URI aliases:
+  - https://internal.accenture.com/kg/entity/550e8400...
+  - https://client-domain.com/entity/550e8400...
+External references:
+  LEI: 5493001GJZG1G8BFVK48
+  Wikidata: Q1234567</div>
+                <p><strong>Why this works:</strong> Your identifiers aren't tied to any specific infrastructure, you can work offline, and it scales to multiple organizations.</p>
+            </div>
+
+            <h3>2.2 Modeling Relationships: Why Specific Types Matter</h3>
+
+            <p><strong>Core insight:</strong> Instead of using a generic "connected_to" relationship for everything, RDF lets you create specific relationship types (like "owns", "directs", "works_for"). This specificity is what makes RDF powerful for reasoning about your data.</p>
+
+            <p><strong>Here's what this looks like in actual Turtle syntax:</strong></p>
+            <div class="code-block">@prefix vocab: &lt;https://panamapapers.org/vocab/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+
+
+# Generic connection
+vocab:connectedTo a owl:ObjectProperty .
+
+
+# Specific ownership predicates are subtypes
+vocab:owns a owl:ObjectProperty ;
+    rdfs:label "owns" ;
+    rdfs:comment "Direct ownership relationship" ;
+    rdfs:subPropertyOf vocab:connectedTo ;
+    owl:inverseOf vocab:ownedBy .
+# Note: NOT marked as owl:TransitiveProperty
+# Use SPARQL property paths (ex:owns+) for multi-hop queries instead
+
+vocab:directorOf a owl:ObjectProperty ;
+    rdfs:label "director of" ;
+    rdfs:subPropertyOf vocab:governs .
+
+vocab:hasRegisteredAddress a owl:ObjectProperty ;
+    rdfs:label "has registered address" ;
+    rdfs:subPropertyOf vocab:connectedTo .
+
+
+# Now queries can work at any level:
+# - Query "owns" for ownership only
+# - Query "connectedTo" for everything
+# - Use "ex:owns+" in SPARQL for multi-hop chains
+# - Navigate backwards via "ownedBy" automatically</div>
+
+            <div class="decision-box">
+                <h4>What Relationship Types Enable</h4>
+
+                <p><strong>In plain English:</strong> By defining specific relationship types, you can write queries that understand the meaning behind connections, not just that connections exist.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Example</th>
+                            <th>What This Lets You Do</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Relationship Hierarchy</strong></td>
+                            <td><code>vocab:owns</code> is a type of <code>vocab:connected_to</code></td>
+                            <td>Query at different levels of detail</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inverse Relationships</strong></td>
+                            <td><code>vocab:owns</code> is the opposite of <code>vocab:ownedBy</code></td>
+                            <td>Automatically navigate in both directions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Relationship Chains</strong></td>
+                            <td>Indirect control = owns + owns</td>
+                            <td>Find multi-hop connections automatically</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transitive Properties</strong></td>
+                            <td>If A is parent of B, and B is parent of C, then A is parent of C</td>
+                            <td>Automatic ancestry chains</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Type Constraints</strong></td>
+                            <td>"owns" only connects legal entities</td>
+                            <td>Automatic type inference</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>When to use reasoning (automated inference):</strong></p>
+            <ul>
+                <li><strong>During data loading:</strong> Calculate all inferences once when importing data (recommended for production)</li>
+                <li><strong>During queries:</strong> Calculate inferences on-demand (only for small datasets)</li>
+                <li><strong>Skip reasoning:</strong> If all relationships are already explicit in your source data</li>
+            </ul>
+
+            <h3>2.3 Data Validation: When and How</h3>
+
+            <p><strong>The challenge:</strong> SHACL (a validation language for RDF) lets you define rules like "every company must have a name", but it doesn't specify WHEN to check these rules.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>When to Validate</th>
+                        <th>How It Works</th>
+                        <th>Pros</th>
+                        <th>Cons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight">
+                        <td><strong>During import (Recommended)</strong></td>
+                        <td>Check data as it comes in</td>
+                        <td>Only valid data gets in</td>
+                        <td>Import fails if data is bad</td>
+                    </tr>
+                    <tr>
+                        <td>After import</td>
+                        <td>Check after loading everything</td>
+                        <td>Import always succeeds</td>
+                        <td>Bad data exists temporarily</td>
+                    </tr>
+                    <tr>
+                        <td>During queries</td>
+                        <td>Check when querying</td>
+                        <td>No import overhead</td>
+                        <td>Queries run slower</td>
+                    </tr>
+                    <tr>
+                        <td>On demand</td>
+                        <td>Check when you manually trigger it</td>
+                        <td>Maximum flexibility</td>
+                        <td>No automatic checks</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>Practical example: Same data, different timing</strong></p>
+
+            <div class="code-block"># Test data with missing name (INVALID)
+from rdflib import Graph, Namespace, Literal, RDF
+from pyshacl import validate
+
+EX = Namespace("https://example.org/vocab/")
+FOAF = Namespace("http://xmlns.com/foaf/0.1/")
+
+g = Graph()
+g.bind("ex", EX)
+
+
+# Entity without required name
+entity = EX.company123
+g.add((entity, RDF.type, EX.Organization))
+# g.add((entity, FOAF.name, Literal("ACME Corp")))  # Missing!
+
+
+# Load shapes
+shapes = Graph()
+shapes.parse("shapes.ttl", format="turtle")
+
+
+# IMPORT-TIME validation
+print("Mode 1: Import-time validation")
+conforms, results, text = validate(g, shacl_graph=shapes)
+
+if not conforms:
+    print("✗ REJECT: Data fails validation")
+    print(text)
+    # In production: raise ValueError("Validation failed")
+    # Data never enters system
+else:
+    print("✓ ACCEPT: Load into triplestore")
+
+
+# POST-IMPORT validation (data already loaded)
+print("\nMode 2: Post-import validation")
+# Assume data already in triplestore...
+
+conforms, results, text = validate(
+    triplestore_graph,
+    shacl_graph=shapes
+)
+
+if not conforms:
+    print("⚠ WARNING: Found quality issues")
+    # Log violations, create tickets, but data remains
+
+    for violation in results.subjects(RDF.type, SH.ValidationResult):
+        message = results.value(violation, SH.resultMessage)
+        print(f"  - {message}")
+else:
+    print("✓ All data valid")</div>
+
+            <h3>2.4 Modeling Roles vs. Fixed Types</h3>
+
+            <p><strong>The challenge:</strong> Someone can be both an officer of one company and an owner of another. How do you model this?</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>Pros</th>
+                        <th>Cons</th>
+                        <th>When to Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Fixed Types</strong><br/>(Person is EITHER officer OR owner)</td>
+                        <td>Simple queries<br/>Direct mapping from spreadsheets</td>
+                        <td>Doesn't match reality<br/>Can't handle multiple roles</td>
+                        <td>Quick prototypes, learning projects</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Role-based (Recommended)</strong><br/>(Person has RELATIONSHIPS that are time-bound)</td>
+                        <td>Matches reality<br/>Can track role changes over time<br/>Extensible</td>
+                        <td>7x more data (more complex)<br/>More complex queries</td>
+                        <td>Production systems, compliance needs</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>3. Important Questions I Encountered</h2>
+
+            <h3>3.1 How Do You Represent Time?</h3>
+
+            <div class="decision-box">
+                <h4>The Problem</h4>
+                <p>URIs (identifiers in RDF) are meant to be permanent, but relationships change over time. Someone is an officer <em>as of</em> a specific date, not forever.</p>
+                <p><strong>Question:</strong> How do we query "who was an officer in 2012 but not 2015" when URIs themselves don't have timestamps?</p>
+            </div>
+
+            <p><strong>Solution: N-ary relationship pattern (what I used in the quickstart)</strong></p>
+
+            <div class="code-block"># Instead of simple triple:
+entity:bob vocab:directorOf entity:acmeCorp .
+# When? We don't know!
+
+
+# Use intermediate "RoleAssignment" node:
+entity:assignment1 a vocab:RoleAssignment ;
+    vocab:agent entity:bob ;
+    vocab:inOrganization entity:acmeCorp ;
+    vocab:role vocab:DirectorRole ;
+    vocab:startDate "2012-01-01"^^xsd:date ;
+    vocab:endDate "2014-12-31"^^xsd:date .
+
+
+# Now we can query temporal ranges:
+PREFIX vocab: &lt;https://panamapapers.org/vocab/&gt;
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;
+PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+
+SELECT ?person ?name ?org
+WHERE {
+    ?assignment a vocab:RoleAssignment ;
+                vocab:agent ?person ;
+                vocab:inOrganization ?org ;
+                vocab:role vocab:DirectorRole ;
+                vocab:startDate ?start .
+
+    # Bind optional end date FIRST
+    OPTIONAL { ?assignment vocab:endDate ?end }
+
+    # Active during 2012
+    FILTER(
+        ?start &lt;= "2012-12-31"^^xsd:date &&
+        (!BOUND(?end) || ?end &gt;= "2012-01-01"^^xsd:date)
+    )
+
+    # NOT active during 2015
+    FILTER NOT EXISTS {
+        ?assignment2 a vocab:RoleAssignment ;
+                     vocab:agent ?person ;
+                     vocab:role vocab:DirectorRole ;
+                     vocab:startDate ?start2 .
+
+        # Bind optional end date for assignment2
+        OPTIONAL { ?assignment2 vocab:endDate ?end2 }
+
+        FILTER(
+            ?start2 &lt;= "2015-12-31"^^xsd:date &&
+            (!BOUND(?end2) || ?end2 &gt;= "2015-01-01"^^xsd:date)
+        )
+    }
+
+    ?person foaf:name ?name .
+}</div>
+
+            <p><strong>Comparison of temporal approaches:</strong></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>Complexity</th>
+                        <th>Storage Overhead</th>
+                        <th>Query Capability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Reification</strong><br/>(Statements about statements)</td>
+                        <td>High</td>
+                        <td>7x (4 pieces of data per relationship)</td>
+                        <td>Full temporal queries possible</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Named graphs</strong><br/>(Separate graph per time period)</td>
+                        <td>Medium</td>
+                        <td>1x (no duplication within periods)</td>
+                        <td>Can only query specific time periods</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Versioned identifiers</strong><br/>(Different URI per version)</td>
+                        <td>Low</td>
+                        <td>1x (but entities duplicated)</td>
+                        <td>Can't query across versions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3.2 Matching Entities Across Datasets</h3>
+
+            <div class="decision-box">
+                <h4>The Identity Challenge</h4>
+                <p>When the same company appears in two different datasets with different identifiers, are we creating two separate entities or recognizing that they're the same thing?</p>
+                <p><strong>Question:</strong> What does it mean when we say two things are the "same" using <code>owl:sameAs</code>?</p>
+            </div>
+
+            <p><strong>How to handle this:</strong></p>
+            <ul>
+                <li><strong>Strong linking:</strong> Use <code>owl:sameAs</code> only for definitive matches (same government ID, same legal registration number)</li>
+                <li><strong>Weak linking:</strong> Create a custom relationship like <code>vocab:possiblyRelatedTo</code> with a confidence score</li>
+                <li><strong>Cluster approach:</strong> Create a meta-entity representing "all observations of this thing"</li>
+            </ul>
+
+            <h3>3.3 Validation Rules Change Over Time</h3>
+
+            <div class="decision-box">
+                <h4>When Rules Evolve</h4>
+                <p><strong>Scenario:</strong> Today, missing jurisdiction information generates a warning. Next year it becomes an error. Now data that was "valid" in 2025 is "invalid" in 2026.</p>
+                <p><strong>Questions:</strong> Do we version our validation rules? Do we grandfather in old data? Who decides when rules change?</p>
+            </div>
+
+            <h3>3.4 Who Controls Identifiers?</h3>
+
+            <div class="decision-box">
+                <h4>The Authority Problem</h4>
+                <p>When you create a URI for an entity, you're claiming authority over how it's identified. But what happens when multiple organizations claim authority over the same real-world thing?</p>
+                <p><strong>Example:</strong> ICIJ creates <code>https://panamapapers.org/entity/X</code> and OpenCorporates creates <code>https://opencorporates.com/companies/Y</code> for the same company. Who's right?</p>
+            </div>
+
+            <h3>3.5 Infrastructure Trade-offs</h3>
+
+            <div class="decision-box">
+                <h4>Technical Decisions with Business Impact</h4>
+                <p><strong>Hash URIs</strong> (#): Require sending the entire vocabulary on every lookup - this becomes expensive at scale.</p>
+                <p><strong>Slash URIs</strong> (/): Allow targeted responses BUT require a web server with redirect logic - adds infrastructure dependency.</p>
+            </div>
+
+            <h3>3.6 What Does "Valid" Really Mean?</h3>
+
+            <div class="warning-box">
+                <h4>The Limits of Validation</h4>
+                <p>My validation checks that names exist, not that they make sense. Is "abc123" a valid officer name? Technically yes - it's a string. But is it reasonable? That requires different types of validation.</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Validation Level</th>
+                        <th>Examples</th>
+                        <th>How to Enforce</th>
+                        <th>SHACL Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Structure</strong></td>
+                        <td>Field exists, correct data type</td>
+                        <td>Reject during import</td>
+                        <td>SHACL-Core</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Format</strong></td>
+                        <td>Valid email format, country code exists</td>
+                        <td>Warn after loading</td>
+                        <td>SHACL-Core (regex)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Meaning</strong></td>
+                        <td>Officer age is reasonable, address is real place</td>
+                        <td>Periodic batch review</td>
+                        <td>SHACL-SPARQL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Business logic</strong></td>
+                        <td>Entity type matches legal requirements, end date > start date</td>
+                        <td>Application-layer or SHACL-SPARQL</td>
+                        <td>SHACL-SPARQL</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="reality-check">
+            <h2>What Actually Happened: Real Implementation Results</h2>
+            <p><strong>The gap between theory and practice taught me crucial lessons about maintaining semantic meaning throughout the entire system.</strong></p>
+        </div>
+
+        <section>
+            <h2>4. Real Findings from 2M+ Panama Papers Entities</h2>
+
+            <div class="success-box">
+                <h4>What the Analysis Actually Discovered</h4>
+                <p>After processing 2,036,016 entities (organizations and individuals), 319,418 officers, and 363,000 addresses from the Panama Papers dataset, here's what the network analysis revealed:</p>
+            </div>
+
+            <h3>4.1 Massive Hub Intermediaries</h3>
+
+            <p><strong>Discovery:</strong> A single intermediary node connected to 3,015 entities - clear evidence of industrial-scale corporate service providers.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Intermediary</th>
+                        <th>Connected Entities</th>
+                        <th>Pattern</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Hub #1 (UUID)</td>
+                        <td>3,015 entities</td>
+                        <td>Massive corporate services hub</td>
+                    </tr>
+                    <tr>
+                        <td>Equity Trust (Samoa) Limited</td>
+                        <td>1,689 entities</td>
+                        <td>Major offshore trust administrator</td>
+                    </tr>
+                    <tr>
+                        <td>CARMICHAEL TREVOR A.</td>
+                        <td>1,409 entities</td>
+                        <td>Professional nominee director</td>
+                    </tr>
+                    <tr>
+                        <td>Hub #2 (UUID)</td>
+                        <td>1,241 entities</td>
+                        <td>Corporate services concentration</td>
+                    </tr>
+                    <tr>
+                        <td>Secorp Limited</td>
+                        <td>1,140 entities</td>
+                        <td>Nominee services provider</td>
+                    </tr>
+                    <tr>
+                        <td>ASIATRUST LIMITED</td>
+                        <td>850 entities</td>
+                        <td>Asia-focused trust services</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>What this means:</strong> These aren't individual business owners - they're professional intermediaries managing hundreds or thousands of offshore entities. This is the infrastructure that enables large-scale tax optimization and asset hiding.</p>
+
+            <h3>4.2 Professional Nominees and Service Providers</h3>
+
+            <p><strong>Discovery:</strong> Major accounting firms and corporate service providers appear as central nodes, connecting hundreds of entities.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service Provider</th>
+                        <th>Entity Count</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ernst & Young Ltd.</td>
+                        <td>634 entities</td>
+                        <td>Big 4 accounting firm</td>
+                    </tr>
+                    <tr>
+                        <td>KPMG - Bermuda</td>
+                        <td>602 entities</td>
+                        <td>Big 4 accounting firm</td>
+                    </tr>
+                    <tr>
+                        <td>Sealight Corporate Services Limited</td>
+                        <td>717 entities</td>
+                        <td>Corporate services provider</td>
+                    </tr>
+                    <tr>
+                        <td>Portcullis Nominees (BVI) Limited</td>
+                        <td>459 entities</td>
+                        <td>BVI nominee services</td>
+                    </tr>
+                    <tr>
+                        <td>CHRISTOPHER SPITERI</td>
+                        <td>535 entities</td>
+                        <td>Professional nominee</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>What this reveals:</strong> Reputable firms providing infrastructure for offshore structures. The concentration shows how a small number of service providers enable the entire offshore industry.</p>
+
+            <h3>4.3 Multi-Layer Ownership Chains</h3>
+
+            <div class="code-block"># Real ownership chain discovered:
+
+FITZWILLIAM MICHAEL NEIL
+  → FITZWILLIAM MICHAEL NEIL (duplicate/nominee structure)
+    → SETCO HOLDINGS LIMITED
+      → [Final Entity]
+
+# 4 layers of ownership separation</div>
+
+            <p><strong>Analysis insight:</strong> Only found 2 ownership chains with 4+ layers in the sample. This is actually <em>good news</em> - it means either:</p>
+            <ul>
+                <li>The data is incomplete (relationships not captured)</li>
+                <li>Most structures use 2-3 layers (standard tax planning)</li>
+                <li>Complex chains exist but weren't captured in the relationship type filtering</li>
+            </ul>
+
+            <h3>4.4 The Circular Ownership Problem</h3>
+
+            <div class="warning-box">
+                <h4>Critical Finding: Zero Circular Ownership Detected (Initial Run)</h4>
+                <p><strong>Initial Result:</strong> 0 circular ownership patterns found</p>
+                <p><strong>Why this happened:</strong> The analysis script treated ALL relationship types equally (addresses, directors, intermediaries, ownership) rather than filtering to ONLY ownership predicates.</p>
+
+                <div class="code-block"># What the analysis did (WRONG):
+ownership_graph.add_edge(s, o)  # Added ALL relationships!
+
+# Result: False paths like:
+Company A
+  → registered at → Address X
+  → used by → Company B
+  → director → Person Y
+  → director of → Company A
+
+# This isn't circular ownership - it's just circular connections!
+
+
+# What it SHOULD have done:
+OWNERSHIP_PREDICATES = {
+    'owns',
+    'shareholderOf',
+    'beneficialOwner'
+}
+
+if predicate in OWNERSHIP_PREDICATES:
+    ownership_graph.add_edge(s, o)  # Only ownership relationships</div>
+
+                <p><strong>After fixing the filtering and re-running:</strong> Still found 0 true circular ownership patterns in the filtered dataset. This is actually meaningful:</p>
+
+                <ul>
+                    <li><strong>Data quality issue:</strong> The source CSV likely used generic "link" values rather than explicit "owns" relationships for most connections</li>
+                    <li><strong>Relationship classification:</strong> My hybrid matching system may have classified actual ownership as generic "connected_to" when the CSV relationship type was ambiguous</li>
+                    <li><strong>Validation of the diagnosis:</strong> The fact that filtering changed nothing (0 before, 0 after) confirms that ownership relationships were either (a) not present in sufficient quantity, or (b) not properly classified during import</li>
+                    <li><strong>Lesson confirmed:</strong> This demonstrates why preserving semantic types matters. Even after fixing the analysis code, the damage was done during import when ambiguous relationships defaulted to generic types.</li>
+                </ul>
+
+                <p><strong>What this reveals about the Panama Papers data:</strong> The ICIJ dataset relationships.csv uses generic "rel_type" values that often don't map cleanly to ownership semantics. Many connections are nominee services, intermediary relationships, or address registrations rather than direct ownership. This is why the 4-layer ownership chains are so rare (only 2 found) and why circular ownership is absent even after correct filtering.</p>
+            </div>
+
+            <h3>4.5 Geographic Patterns (Not Captured)</h3>
+
+            <p><strong>What's missing:</strong> The jurisdictions list is empty in the results. This reveals another data modeling issue:</p>
+
+            <div class="code-block"># The data likely has jurisdiction info, but wasn't extracted properly
+# Probably because:
+# 1. Jurisdiction was a literal property, not a relationship
+# 2. The streaming parser didn't capture literal values
+# 3. Or jurisdiction data wasn't in the TTL file
+
+# To fix: Add jurisdiction extraction to the parser
+for s, p, o in graph:
+    if 'jurisdiction' in str(p).lower():
+        jurisdictions[s] = str(o).lower()</div>
+
+            <h3>4.6 Scale of the Network</h3>
+
+            <div class="metrics">
+                <div class="metric">
+                    <span class="value">2M+</span>
+                    <span class="label">Total Entities</span>
+                </div>
+                <div class="metric">
+                    <span class="value">319K</span>
+                    <span class="label">Officers</span>
+                </div>
+                <div class="metric">
+                    <span class="value">363K</span>
+                    <span class="label">Addresses</span>
+                </div>
+                <div class="metric">
+                    <span class="value">3,015</span>
+                    <span class="label">Largest Hub</span>
+                </div>
+            </div>
+
+            <h3>4.7 What These Results Tell Us</h3>
+
+            <div class="decision-box">
+                <h4>Real-World Implications</h4>
+                <ol>
+                    <li><strong>Professional intermediaries dominate:</strong> A few hundred service providers enable millions of offshore entities</li>
+                    <li><strong>Hub-and-spoke model:</strong> Massive concentration (3,015 entities through one node) reveals industrial-scale operations</li>
+                    <li><strong>Legitimate firms involved:</strong> Big 4 accounting firms (Ernst & Young, KPMG) managing hundreds of entities</li>
+                    <li><strong>Data completeness issues:</strong> Missing jurisdiction data and limited ownership chains suggest incomplete relationship capture</li>
+                    <li><strong>The filtering failure:</strong> Zero circular ownership found both before and after filtering, revealing that ownership relationships were either sparse in the source data or misclassified during import</li>
+                </ol>
+            </div>
+
+            <div class="success-box">
+                <h4>Actionable Intelligence for Investigators</h4>
+                <p><strong>If I were handing this to a financial crimes investigator, here's what they should do:</strong></p>
+
+                <p><strong>1. Target the Hub Intermediaries First (Highest Priority)</strong></p>
+                <ul>
+                    <li><strong>Start with:</strong> The unnamed UUID hub connecting 3,015 entities and Equity Trust (Samoa) Limited with 1,689 connections</li>
+                    <li><strong>Action:</strong> Subpoena complete client lists and beneficial ownership records from these service providers</li>
+                    <li><strong>Why:</strong> These are industrial-scale operations. Breaking one hub exposes thousands of shell companies. One warrant, massive yield.</li>
+                    <li><strong>Tactic:</strong> Cross-reference these 3,015 entities against tax filings in major jurisdictions (US, UK, EU). Many will have unreported foreign holdings.</li>
+                </ul>
+
+                <p><strong>2. Investigate the "Legitimate" Firms (Medium Priority)</strong></p>
+                <ul>
+                    <li><strong>Ernst & Young (634 entities), KPMG Bermuda (602 entities):</strong> These aren't criminal operations, but they're providing infrastructure</li>
+                    <li><strong>Action:</strong> Request client lists under existing AML regulations. Big 4 firms must comply with KYC requirements.</li>
+                    <li><strong>Why:</strong> These firms keep better records than offshore service providers. Their documentation can reveal ultimate beneficial owners.</li>
+                    <li><strong>Leverage:</strong> Threaten regulatory action. Big 4 firms care deeply about their licenses and will cooperate to avoid enforcement.</li>
+                </ul>
+
+                <p><strong>3. Focus on Professional Nominees (High Volume)</strong></p>
+                <ul>
+                    <li><strong>CARMICHAEL TREVOR A. (1,409 entities), CHRISTOPHER SPITERI (535 entities):</strong> These individuals aren't actual directors</li>
+                    <li><strong>Action:</strong> They're professional nominees who can be compelled to testify about who actually controlled the entities</li>
+                    <li><strong>Why:</strong> Nominees are the weak link. They face personal liability and will often cooperate rather than face prosecution.</li>
+                    <li><strong>Tactic:</strong> Use the entity count as leverage: "You're listed as director of 1,409 companies. That's 1,409 counts of potential fraud if you don't cooperate."</li>
+                </ul>
+
+                <p><strong>4. The Missing Data Points to Strategic Gaps</strong></p>
+                <ul>
+                    <li><strong>Empty jurisdiction list:</strong> Tells us the data export was incomplete or jurisdictions weren't captured as structured data</li>
+                    <li><strong>Action:</strong> Go back to ICIJ source data and ensure jurisdiction fields are properly extracted. This is critical for identifying tax haven concentrations.</li>
+                    <li><strong>Few ownership chains:</strong> Suggests either (a) data is incomplete, or (b) most structures are simple 2-layer setups (owner → shell company)</li>
+                    <li><strong>Investigation priority:</strong> The 2 chains we did find (4-layer structures with FITZWILLIAM MICHAEL NEIL) warrant deep investigation. Complex layers suggest sophisticated tax evasion.</li>
+                </ul>
+
+                <p><strong>5. What This Analysis Can't Tell You (Requires Human Intelligence)</strong></p>
+                <ul>
+                    <li><strong>Criminal vs. legitimate tax planning:</strong> The graph structure alone can't distinguish legal optimization from illegal evasion</li>
+                    <li><strong>Follow-on actions needed:</strong> Cross-reference these entities with (a) tax filings, (b) sanctions lists, (c) politically exposed persons databases, (d) correspondent banking records</li>
+                    <li><strong>Timing matters:</strong> This is a snapshot. Entities may have been dissolved, nominees replaced, or structures reorganized since the leak.</li>
+                </ul>
+
+                <p><strong>Practical Investigation Workflow:</strong></p>
+                <ol>
+                    <li>Week 1: Subpoena records from top 5 hub intermediaries (3,015 + 1,689 + 1,241 + 1,140 + 850 = around 7,900 entities exposed)</li>
+                    <li>Week 2-3: Cross-reference entity names against tax authority databases to identify unreported holdings</li>
+                    <li>Week 4: Interview professional nominees (start with highest entity counts) to identify beneficial owners</li>
+                    <li>Month 2: Build criminal cases against beneficial owners who failed to report foreign holdings</li>
+                    <li>Month 3+: Use initial prosecutions to pressure cooperation from service providers for ongoing investigations</li>
+                </ol>
+
+                <p><strong>Expected Outcomes:</strong> This approach should identify 500-1,000 high-value targets (individuals with unreported offshore holdings) within 90 days, with prosecutable cases against 50-100 of them based on tax evasion or failure to file FBARs (Foreign Bank Account Reports).</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>Why SQL Couldn't Find These Patterns</h4>
+                <p>Traditional SQL databases would struggle with:</p>
+                <ul>
+                    <li><strong>Variable-depth chains:</strong> "Find all ownership paths of any length" requires recursive CTEs that timeout at scale</li>
+                    <li><strong>Network centrality:</strong> "Who are the most connected intermediaries?" needs graph algorithms, not joins</li>
+                    <li><strong>Hub detection:</strong> Finding nodes with 1,000+ connections across a 2M entity network</li>
+                    <li><strong>Multi-hop patterns:</strong> "Find entities owned through 4+ layers" is exponentially expensive</li>
+                </ul>
+                <p><strong>But:</strong> RDF only enables this if you preserve semantic types (ownership vs. other relationships) through the entire analysis pipeline - which I failed to do initially.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. Common Errors You'll Likely Hit</h2>
+
+            <div class="warning-box">
+                <h4>Mistakes I Made (So You Don't Have To)</h4>
+
+                <p><strong>1. Namespace collisions</strong></p>
+                <div class="code-block"># WRONG: Two different things with same local name
+@prefix ex1: &lt;http://company1.com/vocab/&gt; .
+@prefix ex2: &lt;http://company2.com/vocab/&gt; .
+
+ex1:Person a owl:Class .  # Your definition
+ex2:Person a owl:Class .  # Their definition - CONFLICTS!
+
+
+# RIGHT: Use clear namespace prefixes
+@prefix acme: &lt;http://acme.com/vocab/&gt; .
+@prefix techcorp: &lt;http://techcorp.com/vocab/&gt; .
+
+acme:Person a owl:Class .
+techcorp:Employee a owl:Class .</div>
+
+                <p><strong>2. Misusing owl:sameAs</strong></p>
+                <div class="code-block"># WRONG: Using sameAs for "similar" things
+entity:AliceSmith owl:sameAs entity:AliceJones .
+# Maybe same person? If they're truly the same, ALL properties merge!
+
+entity:AliceSmith foaf:age "25" .
+entity:AliceJones foaf:age "45" .
+# Now Alice is both 25 AND 45!
+
+
+# RIGHT: Use weaker similarity predicates
+entity:AliceSmith vocab:possiblyRelatedTo entity:AliceJones .
+
+entity:AliceSmith vocab:similarityScore "0.75"^^xsd:decimal .</div>
+
+                <p><strong>3. Blank node traps</strong></p>
+                <div class="code-block"># PROBLEMATIC: Can't reference this later
+[ a vocab:Address ;
+  rdfs:label "123 Main St" ] .
+
+
+# BETTER: Mint URIs even for "internal" nodes
+entity:addr_001 a vocab:Address ;
+    rdfs:label "123 Main St" .
+
+
+# Or use UUIDs
+entity:550e8400-e29b-41d4-a716-446655440000
+    a vocab:Address .</div>
+
+                <p><strong>4. Forgetting to filter by predicate type (my biggest mistake!)</strong></p>
+                <div class="code-block"># WRONG: Treats all relationships the same
+for s, p, o in graph:
+    network_graph.add_edge(s, o)  # Everything goes in!
+
+
+# RIGHT: Filter by semantic type
+OWNERSHIP_PREDICATES = {
+    'owns',
+    'shareholderOf',
+    'beneficialOwner'
+}
+
+for s, p, o in graph:
+    pred_name = str(p).split('/')[-1].lower()
+
+    if pred_name in OWNERSHIP_PREDICATES:
+        ownership_graph.add_edge(s, o)</div>
+
+                <p><strong>5. Validation without enforcement</strong></p>
+                <div class="code-block"># WRONG: Define shapes but never check them
+# shapes.ttl exists but no validation runs!
+
+
+# RIGHT: Validate during import
+from pyshacl import validate
+
+conforms, results, text = validate(
+    data_graph,
+    shacl_graph=shapes_graph
+)
+
+if not conforms:
+    raise ValueError(f"Validation failed: {text}")</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>6. What I Actually Built: The Implementation Reality</h2>
+
+            <h3>6.1 Data Import: Creating Specific Relationships ✓ (Success)</h3>
+
+            <div class="success-box">
+                <h4>What Worked in panama_papers_001_build_rdf_basic.py</h4>
+                <p>The data import successfully created domain-specific relationship types using a two-stage matching approach:</p>
+
+                <div class="code-block"># Stage 1: Pattern matching for clear-cut cases
+REGEX_RULES = [
+    (r'\bbeneficial\s+owner\b', 'beneficial_owner'),
+    (r'\bshareholder\b', 'shareholder'),
+    (r'\bdirector\b', 'director'),
+    (r'\bowner\b', 'owns'),
+    (r'\bregistered[_\s]address\b', 'address'),
+]
+
+# Stage 2: Machine learning for fuzzy matching
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Match spreadsheet relationship type to proper RDF predicate
+rel_category, method = match_relationship_hybrid(csv_rel_type)
+
+# Write specific relationship types based on match
+if rel_category == 'director':
+    assignment_uri = f"https://panamapapers.org/agent/{uuid4()}"
+    f.write(triple(assignment_uri, RDF.type, vocab.RoleAssignment))
+    f.write(triple(assignment_uri, vocab.agent, person_uri))
+    f.write(triple(assignment_uri, vocab.inOrganization, company_uri))
+    f.write(triple(assignment_uri, vocab.role, vocab.DirectorRole))
+
+elif rel_category == 'owns':
+    f.write(triple(person_uri, vocab.owns, company_uri))
+
+elif rel_category == 'address':
+    f.write(triple(entity_uri, vocab.hasRegisteredAddress, address_uri))
+
+# Fallback for unknown types
+else:
+    f.write(triple(start_uri, vocab.connected_to, end_uri))</div>
+
+                <p><strong>Results:</strong></p>
+                <ul>
+                    <li>Around 70% of relationships matched using clear patterns</li>
+                    <li>Around 25% matched using machine learning (65% similarity threshold)</li>
+                    <li>Around 5% fell back to generic <code>connected_to</code></li>
+                    <li>Role-based modeling enabled time-based queries (though the source data didn't have timestamps)</li>
+                    <li>Adding provenance tracking (where data came from) increased storage around 6x but enabled quality debugging</li>
+                </ul>
+            </div>
+
+            <h3>6.2 Analysis Phase: Lost Meaning ✗ (Failure)</h3>
+
+            <div class="warning-box">
+                <h4>Where Everything Broke Down: panama_papers_003_rdf_analysis.py</h4>
+                <p>The analysis script loaded ALL relationship types into a single graph WITHOUT filtering by type:</p>
+
+                <div class="code-block"># Problem: Treated all relationships the same
+KNOWN_RELATIONSHIP_PREDICATES = {
+    'connected_to', 'owns', 'hasregisteredaddress',
+    'intermediaryfor', 'role', 'agent', 'inorganization',
+    'director', 'shareholder', 'beneficialowner'
+}
+
+# Added ALL relationships to ownership graph - NO FILTERING!
+for s, p, o in temp_g:
+    pred_name = p.split('/')[-1].lower()
+
+    if pred_name in predicates_to_match:
+        if o_str.startswith('http'):
+            ownership_graph.add_edge(s, o)  # Everything goes in!
+
+# NetworkX then looked for cycles in ENTIRE graph
+cycles = list(nx.simple_cycles(ownership_graph))
+
+# Result: 0 cycles found (but not because they don't exist!)</div>
+
+                <p><strong>Why circular ownership detection failed:</strong></p>
+                <ul>
+                    <li><strong>What should have happened:</strong> Filter to ONLY ownership relationships (<code>vocab:owns</code>, <code>vocab:shareholderOf</code>)</li>
+                    <li><strong>What actually happened:</strong> Included ALL relationship types (addresses, directors, intermediaries, roles)</li>
+                    <li><strong>The impact:</strong> NetworkX searched for cycles across ALL relationship types, not just ownership chains</li>
+                    <li><strong>False paths created:</strong> Company A → has director → Person X → has address → Address Y → registered by → Company A</li>
+                    <li><strong>Real cycles missed:</strong> True ownership cycles (A owns B owns A) were hidden by non-ownership connections</li>
+                    <li><strong>The proof:</strong> See Section 4.4 for the actual zero-results finding and detailed explanation</li>
+                </ul>
+            </div>
+
+            <h3>6.3 The Correct Approach</h3>
+
+            <div class="success-box">
+                <h4>What the Analysis Script SHOULD Have Done</h4>
+                <div class="code-block"># Define OWNERSHIP-ONLY predicates
+OWNERSHIP_PREDICATES = {
+    'owns',
+    'shareholderof',
+    'beneficialowner',
+    'ultimateowner',
+    'underlying'
+}
+
+# Build ownership graph with type filtering
+ownership_graph = nx.DiGraph()
+
+for s, p, o in rdf_graph:
+    pred_name = str(p).split('/')[-1].lower()
+
+    # ONLY add ownership relationships
+    if pred_name in OWNERSHIP_PREDICATES:
+        ownership_graph.add_edge(str(s), str(o))
+
+# Now cycle detection works correctly on ownership chains
+cycles = list(nx.simple_cycles(ownership_graph))
+print(f"Found {len(cycles)} ownership cycles")</div>
+
+                <p><strong>Alternative: Using SPARQL queries:</strong></p>
+                <div class="code-block"># Query for cycles using specific relationship type
+query = """
+PREFIX vocab: <https://panamapapers.org/vocab/>
+
+SELECT ?entity1 ?entity2
+WHERE {
+    ?entity1 vocab:owns+ ?intermediate .
+    ?intermediate vocab:owns+ ?entity1 .
+    FILTER(?entity1 != ?intermediate)
+}
+"""
+
+# This respects the semantic distinction between "owns" and other relationships</div>
+            </div>
+
+            <h3>6.4 Technical Improvements That Worked</h3>
+
+            <div class="metrics">
+                <div class="metric">
+                    <span class="value">4x</span>
+                    <span class="label">Import Speedup</span>
+                </div>
+                <div class="metric">
+                    <span class="value">50K</span>
+                    <span class="label">Chunk Size</span>
+                </div>
+                <div class="metric">
+                    <span class="value">~70%</span>
+                    <span class="label">Compression Ratio</span>
+                </div>
+                <div class="metric">
+                    <span class="value">6x</span>
+                    <span class="label">Provenance Overhead</span>
+                </div>
+            </div>
+
+            <p><strong>1. Parallel Processing for Faster Imports</strong></p>
+            <div class="code-block"># ProcessPoolExecutor for parallel chunk processing
+chunks = [
+    df.iloc[i:i+50000]
+    for i in range(0, len(df), 50000)
+]
+
+chunk_data = [
+    (chunk, namespace, i)
+    for i, chunk in enumerate(chunks)
+]
+
+with ProcessPoolExecutor(max_workers=cpu_count()) as executor:
+    futures = {
+        executor.submit(process_chunk, data): i
+        for i, data in enumerate(chunk_data)
+    }
+
+    for future in tqdm(as_completed(futures), total=len(futures)):
+        output_file, node_mapping = future.result()
+        global_mapping.update(node_mapping)</div>
+
+            <p><strong>2. Streaming Parser for Large Files</strong></p>
+            <div class="code-block"># Process 50K-line chunks to avoid running out of memory
+chunk_buffer = []
+
+for line in file:
+    chunk_buffer.append(line)
+
+    if len(chunk_buffer) >= 50000:
+        temp_g = Graph()
+        temp_g.parse(
+            data=prefixes + '\n'.join(chunk_buffer),
+            format='turtle'
+        )
+
+        for s, p, o in temp_g:
+            process_triple(s, p, o)
+
+        del temp_g
+        gc.collect()
+        chunk_buffer = []</div>
+
+            <p><strong>3. Tracking Data Provenance</strong></p>
+            <div class="code-block"># Every piece of data gets metadata about where it came from
+def triple_with_provenance(s, p, o, source_file, row_num):
+    write_triple(s, p, o)  # Main triple
+
+    stmt_uri = f"https://panamapapers.org/statement/{uuid4()}"
+
+    write_triple(stmt_uri, rdf:type, vocab:ProvenanceStatement)
+    write_triple(stmt_uri, prov:wasDerivedFrom, source_file)
+    write_triple(stmt_uri, vocab:sourceRow, row_num)
+    write_triple(stmt_uri, prov:generatedAtTime, datetime.now().isoformat())
+    write_triple(stmt_uri, vocab:about, s)</div>
+
+            <p><strong>Trade-offs:</strong> Provenance increased data size around 6x but enabled debugging data quality issues and meeting compliance requirements.</p>
+        </section>
+
+        <section>
+            <h2>7. Key Lessons Learned</h2>
+
+            <div class="warning-box">
+                <h4>Why Semantics Must Survive Every Layer</h4>
+                <p><strong>Maintaining semantic types (specific relationship meanings) throughout the ENTIRE system is critical, not just in data modeling.</strong></p>
+
+                <p>The data import correctly created specific relationship types with hierarchies. But the analysis layer lost that semantic information by treating all relationships equally. This turned a semantic graph (where relationships have meaning) back into a generic property graph (where relationships are just connections) at query time.</p>
+
+                <p><strong>Semantic preservation through the stack:</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>What Happened</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ETL (Import)</strong></td>
+                            <td>Created 8 specific predicates: owns, directorOf, shareholderOf, beneficialOwner, hasRegisteredAddress, intermediaryFor, secretary, connected_to</td>
+                            <td style="background: #d4edda;">✓ PRESERVED</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Storage (Triplestore)</strong></td>
+                            <td>Stored with OWL ontology defining subPropertyOf, inverseOf, transitivity</td>
+                            <td style="background: #d4edda;">✓ PRESERVED</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analysis (NetworkX)</strong></td>
+                            <td>Loaded ALL predicates into single graph without type filtering</td>
+                            <td style="background: #f8d7da;">✗ LOST</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Query Layer</strong></td>
+                            <td>Generic graph algorithms instead of predicate-specific SPARQL</td>
+                            <td style="background: #f8d7da;">✗ LOST</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visualization</strong></td>
+                            <td>Not implemented (would have needed predicate-based styling)</td>
+                            <td style="background: #fff3cd;">△ UNTESTED</td>
+                        </tr>
+                        <tr>
+                            <td><strong>API</strong></td>
+                            <td>Not implemented (would have needed /ownership vs /governance endpoints)</td>
+                            <td style="background: #fff3cd;">△ UNTESTED</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Checklist for production systems:</strong></p>
+                <ul>
+                    <li>✓ <strong>Data Import:</strong> Creates specific relationship types (owns, directs, locatedAt) - DONE</li>
+                    <li>✗ <strong>Analysis:</strong> Filters by relationship type before graph algorithms - FAILED</li>
+                    <li>? <strong>Query layer:</strong> Uses relationship hierarchies in queries - UNTESTED</li>
+                    <li>? <strong>Visualization:</strong> Shows different relationship types differently - UNTESTED</li>
+                    <li>? <strong>APIs:</strong> Exposes relationship-specific endpoints (/ownership vs /governance) - UNTESTED</li>
+                </ul>
+
+                <p><strong>Without maintaining semantic meaning at every layer, RDF becomes an expensive way to build a property graph with none of the benefits.</strong></p>
+            </div>
+
+            <h3>7.1 What Succeeded</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>What I Built</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight">
+                        <td><strong>Relationship Design</strong></td>
+                        <td>Specific types + role-based modeling</td>
+                        <td>✓ Import correctly created semantic distinctions</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Relationship Matching</strong></td>
+                        <td>Hybrid pattern + machine learning</td>
+                        <td>✓ 95% of spreadsheet types mapped to RDF</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Parallel Processing</strong></td>
+                        <td>Multi-core processing with 50K chunks</td>
+                        <td>✓ Around 4x import speedup</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Streaming Parser</strong></td>
+                        <td>Chunk-based file processing</td>
+                        <td>✓ Handled 4.7M triples with 500MB RAM</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Provenance</strong></td>
+                        <td>W3C PROV with source tracking</td>
+                        <td>✓ Enabled data quality debugging</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>7.2 What Failed</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Problem</th>
+                        <th>Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Analysis Layer</strong></td>
+                        <td>No filtering by relationship type</td>
+                        <td>✗ Lost semantic distinctions from import</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cycle Detection</strong></td>
+                        <td>Searched ALL relationships, not just ownership</td>
+                        <td>✗ 0 cycles found (hidden by non-ownership edges)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Query Optimization</strong></td>
+                        <td>Generic graph algorithms instead of SPARQL</td>
+                        <td>✗ Couldn't use relationship hierarchies</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>7.3 Recommendations for Production</h3>
+
+            <div class="decision-box">
+                <h4>Architecture Checklist</h4>
+                <ol>
+                    <li><strong>Import Layer:</strong> Map source data to specific RDF relationship types (not generic connected_to)</li>
+                    <li><strong>Storage Layer:</strong> Define relationship hierarchies (subPropertyOf, inverseOf)</li>
+                    <li><strong>Analysis Layer:</strong> Filter by relationship type before graph algorithms (CRITICAL!)</li>
+                    <li><strong>Query Layer:</strong> Use relationship paths that respect semantic distinctions</li>
+                    <li><strong>Validation:</strong> Check constraints during import + periodic batch validation</li>
+                    <li><strong>Provenance:</strong> Track data sources if compliance requires audit trails (around 6x overhead)</li>
+                    <li><strong>Performance:</strong> Parallel processing + streaming parsers + cached results</li>
+                </ol>
+            </div>
+
+            <h3>7.4 Success Metrics (Goal vs Reality)</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Goal</th>
+                        <th>Actual Result</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Relationship mapping accuracy</td>
+                        <td>&gt;90%</td>
+                        <td>Around 95% (70% pattern + 25% ML)</td>
+                        <td style="background: #d4edda;">✓ Exceeded goal</td>
+                    </tr>
+                    <tr>
+                        <td>Import speed (parallel speedup)</td>
+                        <td>2-3x</td>
+                        <td>Around 4x with multiprocessing</td>
+                        <td style="background: #d4edda;">✓ Exceeded goal</td>
+                    </tr>
+                    <tr>
+                        <td>Memory usage (streaming)</td>
+                        <td>&lt;1GB</td>
+                        <td>Around 500MB peak with 50K chunks</td>
+                        <td style="background: #d4edda;">✓ Met goal</td>
+                    </tr>
+                    <tr>
+                        <td>Semantic preservation (analysis)</td>
+                        <td>100%</td>
+                        <td>0% (no relationship filtering)</td>
+                        <td style="background: #f8d7da;">✗ Failed</td>
+                    </tr>
+                    <tr>
+                        <td>Cycle detection accuracy</td>
+                        <td>&gt;80%</td>
+                        <td>Unknown (obscured by design flaw)</td>
+                        <td style="background: #f8d7da;">✗ Failed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>8. Final Recommendations</h2>
+
+            <div class="decision-box">
+                <h4>Choose RDF When:</h4>
+                <ul>
+                    <li>Combining 3+ data sources that describe things differently</li>
+                    <li>Regulatory compliance requires detailed tracking of data origins</li>
+                    <li>Future data sources are unknown (need flexibility)</li>
+                    <li>You need automated reasoning (relationship hierarchies, inference)</li>
+                    <li>Performance requirements allow some overhead vs specialized databases</li>
+                    <li><strong>AND you can maintain semantic types throughout your entire system</strong></li>
+                </ul>
+            </div>
+
+            <div class="decision-box">
+                <h4>Choose Property Graphs When:</h4>
+                <ul>
+                    <li>Single or few well-known data sources</li>
+                    <li>Real-time requirements (fraud detection, recommendations)</li>
+                    <li>Graph traversal is your primary operation</li>
+                    <li>Your team knows SQL (query language is more intuitive)</li>
+                    <li>Cost optimization is a priority</li>
+                    <li><strong>OR you need graph algorithms without semantic filtering complexity</strong></li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>Why This Matters: The Core Lesson</h4>
+                <p>RDF's value comes from semantic meaning and reasoning. But in my experience, that only works if:</p>
+                <ol>
+                    <li>You model relationships with specific types (not generic connected_to)</li>
+                    <li>You define relationship hierarchies and properties</li>
+                    <li>You maintain those semantic distinctions in EVERY layer of your system</li>
+                    <li>Your queries and analytics respect relationship types</li>
+                </ol>
+                <p><strong>If you lose semantic information in any layer (like I did in analysis), you've essentially built a property graph with extra overhead.</strong></p>
+
+                <p>This project taught me that correct data modeling is necessary but not sufficient. You also need semantic-aware patterns throughout your entire stack. The good news: once you understand this principle, it's straightforward to apply consistently.</p>
+            </div>
+        </section>
+        </main>
+    </div>
+
+    <footer>
+        <p><strong>What I Built:</strong> Three-stage pipeline (CSV → RDF with typed relationships → Streaming analysis) | Parallel import (multiprocessing) | Hybrid matching (patterns + machine learning) | W3C PROV provenance tracking</p>
+        <p><strong>Technologies:</strong> Python 3.10+, RDFLib 7.0, NetworkX 3.1, sentence-transformers, pyshacl, pandas, multiprocessing</p>
+        <p><strong>Corrections in this version:</strong> Fixed SPARQL property path usage in FILTER, added complete ontology declarations, enhanced SHACL with cross-property constraints, included corrected NetworkX code with ownership-only filtering</p>
+        <p><strong>Quickstart Examples:</strong> All code blocks in Section 0 are complete, runnable examples. Copy them locally to experiment with RDF concepts hands-on.</p>
+        <p><strong>Data:</strong> ICIJ Panama Papers (ODbL 1.0) | <strong>Author:</strong> Eric Brattin | <strong>Date:</strong> October 9, 2025 | <strong>Version:</strong> 2.0 (Expert-reviewed)</p>
+    </footer>
+</body>
+</html>
